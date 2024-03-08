@@ -75,11 +75,14 @@ WSGI_APPLICATION = "adcomment.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "adcomment",
+        "USER": "adcomment",
+        "PASSWORD": "123@456",
+        "HOST": "postgres",
+        "PORT": "5432",
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
