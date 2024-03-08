@@ -22,6 +22,7 @@ from drf_spectacular.views import SpectacularSwaggerView
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("accounts.urls", namespace="accounts")),
+    path("ad/", include("ad.urls", namespace="ad")),
     path(
         "schema/swagger-ui/",
         SpectacularSwaggerView.as_view(url_name="schema"),
