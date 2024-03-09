@@ -83,8 +83,19 @@ class CommentCreateView(APIView):
             return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# class AdUpdateDeleteView(APIView):
-#     serializer_class = AdSerializers
+class CommentUpdateDeleteView(
+    mixins.UpdateModelMixin, mixins.DestroyModelMixin, GenericViewSet
+):
+    serializer_class = CommentSerializers
+    queryset = Comment.objects.all()
+
+    permission_classes = [
+        IsOwnerOrReadOnly,
+    ]
+
+
+# class CommentUpdateDeleteView(APIView):
+#     serializer_class = CommentSerializers
 
 #     permission_classes = [
 #         IsOwnerOrReadOnly,
@@ -92,8 +103,8 @@ class CommentCreateView(APIView):
 
 #     def dispatch(self, request, *args, **kwargs):
 #         try:
-#             self.ad_instance = Ad.objects.get(id=kwargs["pk"])
-#             self.check_object_permissions(request, self.ad_instance)
+#             self.comment_instance = Comment.objects.get(id=kwargs["pk"])
+#             self.check_object_permissions(request, self.comment_instance)
 #         except PermissionDenied as ex:
 #             return Response(ex.error_dict, status=status.HTTP_403_FORBIDDEN)
 #         except IntegrityError as ex:
@@ -103,50 +114,17 @@ class CommentCreateView(APIView):
 
 #     def put(self, request, *args, **kwargs):
 #         ser_data = self.serializer_class(
-#             instance=self.ad_instance, data=request.POST, partial=True
+#             instance=self.comment_instance, data=request.POST, partial=True
 #         )
 #         if ser_data.is_valid():
 #             ser_data.save()
-#             self.ad_instance.updated = datetime.now()
+#             self.comment_instance.updated = datetime.now()
 #             return Response(ser_data.data, status=status.HTTP_202_ACCEPTED)
 #         return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
 #     def delete(self, request, *args, **kwargs):
-#         self.ad_instance.delete()
+#         self.comment_instance.delete()
 #         return Response({"message": "Ad deleted"}, status=status.HTTP_200_OK)
-
-
-class CommentUpdateDeleteView(APIView):
-    serializer_class = CommentSerializers
-
-    permission_classes = [
-        IsOwnerOrReadOnly,
-    ]
-
-    def dispatch(self, request, *args, **kwargs):
-        try:
-            self.comment_instance = Comment.objects.get(id=kwargs["pk"])
-            self.check_object_permissions(request, self.comment_instance)
-        except PermissionDenied as ex:
-            return Response(ex.error_dict, status=status.HTTP_403_FORBIDDEN)
-        except IntegrityError as ex:
-            return Response(ex.error_dict, status=status.HTTP_400_BAD_REQUEST)
-
-        return super().dispatch(request, *args, **kwargs)
-
-    def put(self, request, *args, **kwargs):
-        ser_data = self.serializer_class(
-            instance=self.comment_instance, data=request.POST, partial=True
-        )
-        if ser_data.is_valid():
-            ser_data.save()
-            self.comment_instance.updated = datetime.now()
-            return Response(ser_data.data, status=status.HTTP_202_ACCEPTED)
-        return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, *args, **kwargs):
-        self.comment_instance.delete()
-        return Response({"message": "Ad deleted"}, status=status.HTTP_200_OK)
 
 
 class AdUpdateDeleteView(

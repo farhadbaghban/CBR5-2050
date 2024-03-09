@@ -25,20 +25,17 @@ class TestUrls(SimpleTestCase):
 
     def test_ad_update_url_resolves(self):
         url = reverse("ad:ad_update", kwargs={"pk": 1})
-        resolver_match = resolve(url)
-        self.assertEquals(resolver_match.func.view_class, AdUpdateDeleteView)
+        self.assertEquals(
+            resolve(url).func.__name__,
+            AdUpdateDeleteView.as_view({"put": "update"}).__name__,
+        )
 
     def test_ad_delete_url_resolves(self):
         url = reverse("ad:ad_delete", kwargs={"pk": 1})
-        self.assertEquals(resolve(url).func.view_class, AdUpdateDeleteView)
-
-    # def test_ad_update_resolves(self):
-    #     url = reverse("ad:ad_update", args=[1])
-    #     self.assertEquals(resolve(url).func.view_class, AdUpdateDeleteView)
-
-    # def test_ad_delete_resolves(self):
-    #     url = reverse("ad:ad_delete", args=[1])
-    #     self.assertEquals(resolve(url).func.view_class, AdUpdateDeleteView)
+        self.assertEquals(
+            resolve(url).func.__name__,
+            AdUpdateDeleteView.as_view({"delete": "destroy"}).__name__,
+        )
 
     def test_comment_info_url_resolves(self):
         url = reverse("ad:comment_info", args=[1])
@@ -49,9 +46,15 @@ class TestUrls(SimpleTestCase):
         self.assertEquals(resolve(url).func.view_class, CommentCreateView)
 
     def test_comment_update_resolves(self):
-        url = reverse("ad:comment_update", args=[1])
-        self.assertEquals(resolve(url).func.view_class, CommentUpdateDeleteView)
+        url = reverse("ad:comment_update", kwargs={"pk": 1})
+        self.assertEquals(
+            resolve(url).func.__name__,
+            CommentUpdateDeleteView.as_view({"put": "update"}).__name__,
+        )
 
     def test_comment_delete_resolves(self):
-        url = reverse("ad:comment_delete", args=[1])
-        self.assertEquals(resolve(url).func.view_class, CommentUpdateDeleteView)
+        url = reverse("ad:comment_delete", kwargs={"pk": 1})
+        self.assertEquals(
+            resolve(url).func.__name__,
+            CommentUpdateDeleteView.as_view({"delete": "destroy"}).__name__,
+        )

@@ -14,7 +14,7 @@ services:
     volumes:
       - ./src:/src
     depends_on:
-      - db
+      - postgres
   postgres:
     container_name: postgres
     image: postgres:latest
@@ -32,4 +32,4 @@ services:
 networks:
   main:
 volumes:
-  postgres-data:
+  postgres_data:
