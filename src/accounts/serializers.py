@@ -7,6 +7,11 @@ class UserListSerializer(serializers.ModelSerializer):
         model = User
         exclude = [
             "password",
+            "last_login",
+            "is_active",
+            "is_admin",
+            "de_activate_date",
+            "registered_date",
         ]
 
 

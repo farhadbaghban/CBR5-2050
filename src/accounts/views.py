@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.shortcuts import get_list_or_404, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from rest_framework.views import APIView
@@ -21,7 +20,7 @@ class UserListView(APIView):
 
     def get(self, request, *args, **kwargs):
         if kwargs:
-            user_instance = get_object_or_404(User, id=kwargs["user_id"])
+            user_instance = get_object_or_404(User, id=kwargs["pk"])
             serializer = self.serializer_class(user_instance)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:

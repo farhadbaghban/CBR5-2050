@@ -5,12 +5,18 @@ from accounts.models import User
 class Ad(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     body = models.TextField()
-    slug = models.SlugField(unique=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        verbose_name = "Ad"
+        verbose_name_plural = "Ads"
+        ordering = [
+            "body",
+        ]
+
     def __str__(self):
-        return self.slug
+        return self.body
 
 
 class Comment(models.Model):
@@ -22,6 +28,11 @@ class Comment(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=["user", "ad"], name="unique_user_ad")
+        ]
+        verbose_name = "Comment"
+        verbose_name_plural = "Comments"
+        ordering = [
+            "body",
         ]
 
     def __str__(self):

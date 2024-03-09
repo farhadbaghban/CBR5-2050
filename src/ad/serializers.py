@@ -2,12 +2,20 @@ from rest_framework import serializers
 from .models import Ad, Comment
 
 
-class AdSerializers(serializers.ModelSerializer):
+class AdCreateSerializers(serializers.ModelSerializer):
     class Meta:
         model = Ad
-        field = "__all__"
+        fields = ("user", "body")
 
-    def get_answers(self, obj):
+
+class AdSerializers(serializers.ModelSerializer):
+    comments = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Ad
+        fields = ("user", "body", "comments")
+
+    def get_comments(self, obj):
         result = obj.acomments.all()
         return CommentSerializers(instance=result, many=True).data
 
@@ -15,4 +23,4 @@ class AdSerializers(serializers.ModelSerializer):
 class CommentSerializers(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        field = "__all__"
+        fields = ("user", "body", "ad")

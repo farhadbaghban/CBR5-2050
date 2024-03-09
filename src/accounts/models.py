@@ -24,7 +24,7 @@ class User(AbstractBaseUser):
     registered_date = models.DateTimeField(auto_now_add=True)
     objects = UserManager()
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["full_name", "email"]
+    REQUIRED_FIELDS = ["full_name"]
 
     class Meta:
         verbose_name = "User"

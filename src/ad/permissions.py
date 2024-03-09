@@ -5,7 +5,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
     message = "access denied , you are not owener"
 
     def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user
+        return request.user.is_authenticated
 
     def has_object_permission(self, request, view, obj):
         if request.method == permissions.SAFE_METHODS:
