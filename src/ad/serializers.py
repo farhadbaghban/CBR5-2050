@@ -2,13 +2,6 @@ from rest_framework import serializers
 from .models import Ad, Comment
 
 
-class AdCreateSerializers(serializers.ModelSerializer):
-    class Meta:
-        model = Ad
-        fields = ("body", "id", "user", "created")
-        read_only_fields = ("id", "user", "created")
-
-
 class AdSerializers(serializers.ModelSerializer):
     comments = serializers.SerializerMethodField()
 

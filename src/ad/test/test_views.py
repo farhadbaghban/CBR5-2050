@@ -22,21 +22,23 @@ class AdViewTest(APITestCase):
         self.client.login(email=self.user.email, password=self.PASSWORD)
         return super().setUp()
 
-    def test_get_ad(self):
-        url = reverse("ad:list_ads")
+    def test_get_list_ad(self):
+        url = reverse("ad:create_list_ads")
         response = self.client.get(url)
         self.assertEquals(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_info_ad(self):
+        url = reverse("ad:info_ads", args=[1])
         Ad.objects.create(
             user=self.user,
             body="this is body",
         )
         response = self.client.get(url)
         self.assertEquals(response.status_code, status.HTTP_200_OK)
-        self.assertEquals(response.data[0]["body"], "this is body")
-        self.assertEquals(len(response.data), 1)
+        self.assertEquals(response.data["body"], "this is body")
 
     def test_create_ad(self):
-        url = reverse("ad:ad_create")
+        url = reverse("ad:create_list_ads")
         ad = {
             "body": "this is next body",
         }
@@ -52,7 +54,7 @@ class AdViewTest(APITestCase):
             user=self.user,
             body="this is body",
         )
-        url = reverse("ad:ad_update", args=[1])
+        url = reverse("ad:ad_delete_update", args=[1])
         update_ad = {"body": "this is updated body"}
         response = self.client.put(url, update_ad)
         self.assertEquals(response.status_code, status.HTTP_200_OK, response.content)
@@ -69,7 +71,7 @@ class AdViewTest(APITestCase):
             user=self.user,
             body="this is body",
         )
-        url = reverse("ad:ad_delete", args=[1])
+        url = reverse("ad:ad_delete_update", args=[1])
         response = self.client.delete(url)
         self.assertEquals(response.status_code, status.HTTP_204_NO_CONTENT)
 
@@ -93,7 +95,7 @@ class CommentViewTest(APITestCase):
         return super().setUp()
 
     def test_get_comment(self):
-        url = reverse("ad:comment_info", args=[1])
+        url = reverse("ad:comment_create_info", args=[1])
         response = self.client.get(url)
         self.assertEquals(response.status_code, status.HTTP_404_NOT_FOUND)
         Comment.objects.create(
@@ -108,7 +110,7 @@ class CommentViewTest(APITestCase):
         )
 
     def test_create_comment(self):
-        url = reverse("ad:comment_create", args=[1])
+        url = reverse("ad:comment_create_info", args=[1])
         comment = {
             "body": "this is next comment body",
         }
@@ -125,7 +127,7 @@ class CommentViewTest(APITestCase):
             ad=self.ad,
             body="this is comment body",
         )
-        url = reverse("ad:comment_update", args=[1])
+        url = reverse("ad:comment_delete_update", args=[1])
         update_comment = {"body": "this is updated comment body"}
         response = self.client.put(url, update_comment)
         self.assertEquals(response.status_code, status.HTTP_200_OK)
@@ -141,6 +143,6 @@ class CommentViewTest(APITestCase):
             ad=self.ad,
             body="this is comment body",
         )
-        url = reverse("ad:comment_delete", args=[1])
+        url = reverse("ad:comment_delete_update", args=[1])
         response = self.client.delete(url)
         self.assertEquals(response.status_code, status.HTTP_204_NO_CONTENT)
