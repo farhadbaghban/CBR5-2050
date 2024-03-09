@@ -23,13 +23,22 @@ class TestUrls(SimpleTestCase):
         url = reverse("ad:ad_create")
         self.assertEquals(resolve(url).func.view_class, AdCreateView)
 
-    def test_ad_update_resolves(self):
-        url = reverse("ad:ad_update", args=[1])
+    def test_ad_update_url_resolves(self):
+        url = reverse("ad:ad_update", kwargs={"pk": 1})
+        resolver_match = resolve(url)
+        self.assertEquals(resolver_match.func.view_class, AdUpdateDeleteView)
+
+    def test_ad_delete_url_resolves(self):
+        url = reverse("ad:ad_delete", kwargs={"pk": 1})
         self.assertEquals(resolve(url).func.view_class, AdUpdateDeleteView)
 
-    def test_ad_delete_resolves(self):
-        url = reverse("ad:ad_delete", args=[1])
-        self.assertEquals(resolve(url).func.view_class, AdUpdateDeleteView)
+    # def test_ad_update_resolves(self):
+    #     url = reverse("ad:ad_update", args=[1])
+    #     self.assertEquals(resolve(url).func.view_class, AdUpdateDeleteView)
+
+    # def test_ad_delete_resolves(self):
+    #     url = reverse("ad:ad_delete", args=[1])
+    #     self.assertEquals(resolve(url).func.view_class, AdUpdateDeleteView)
 
     def test_comment_info_url_resolves(self):
         url = reverse("ad:comment_info", args=[1])
