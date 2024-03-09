@@ -7,7 +7,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from .models import Ad, Comment
-from .serializers import AdSerializers, CommentSerializers, AdCreateSerializers
+from .serializers import (
+    AdSerializers,
+    CommentSerializers,
+    AdCreateSerializers,
+)
 from .permissions import IsOwnerOrReadOnly
 
 
@@ -23,6 +27,15 @@ class AdListView(APIView):
             ads = get_list_or_404(Ad)
             serializer = self.serializer_class(instance=ads, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class CommentListView(APIView):
+    serializer_class = CommentSerializers
+
+    def get(self, request, *args, **kwargs):
+        comment_instance = get_object_or_404(Comment, id=kwargs["pk"])
+        serializer = self.serializer_class(instance=comment_instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class AdCreateView(APIView):
@@ -43,18 +56,9 @@ class AdCreateView(APIView):
             return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CommentListView(APIView):
-    serializer_class = CommentSerializers
-
-    def get(self, request, *args, **kwargs):
-        comment_instance = get_object_or_404(Ad, id=kwargs["pk"])
-        serializer = self.serializer_class(instance=comment_instance)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
 class CommentCreateView(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
-    serializer_class = AdSerializers
+    serializer_class = CommentSerializers
 
     def post(self, request, *args, **kwargs):
         ser_data = self.serializer_class(data=request.POST)
@@ -100,8 +104,8 @@ class AdUpdateDeleteView(APIView):
             instance=self.ad_instance, data=request.POST, partial=True
         )
         if ser_data.is_valid():
-            self.ad_instance.updated = datetime.now()
             ser_data.save()
+            self.ad_instance.updated = datetime.now()
             return Response(ser_data.data, status=status.HTTP_202_ACCEPTED)
         return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -132,9 +136,9 @@ class CommentUpdateDeleteView(APIView):
         ser_data = self.serializer_class(
             instance=self.comment_instance, data=request.POST, partial=True
         )
-        self.comment_instance.updated = datetime.now()
         if ser_data.is_valid():
             ser_data.save()
+            self.comment_instance.updated = datetime.now()
             return Response(ser_data.data, status=status.HTTP_202_ACCEPTED)
         return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
 

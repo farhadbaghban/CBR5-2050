@@ -5,7 +5,8 @@ from .models import Ad, Comment
 class AdCreateSerializers(serializers.ModelSerializer):
     class Meta:
         model = Ad
-        fields = ("user", "body")
+        fields = ("body", "id", "user", "created")
+        read_only_fields = ("id", "user", "created")
 
 
 class AdSerializers(serializers.ModelSerializer):
@@ -13,7 +14,8 @@ class AdSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = Ad
-        fields = ("user", "body", "comments")
+        fields = ("body", "id", "user", "comments", "created")
+        read_only_fields = ("id", "user", "comments", "created")
 
     def get_comments(self, obj):
         result = obj.acomments.all()
@@ -23,4 +25,5 @@ class AdSerializers(serializers.ModelSerializer):
 class CommentSerializers(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = ("user", "body", "ad")
+        fields = ("body", "id", "user", "ad", "created")
+        read_only_fields = ("id", "user", "ad", "created")

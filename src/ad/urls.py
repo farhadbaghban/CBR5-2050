@@ -18,7 +18,9 @@ urlpatterns = [
     path("ads/update/<int:pk>", AdUpdateDeleteView.as_view(), name="ad_update"),
     path("ads/delete/<int:pk>", AdUpdateDeleteView.as_view(), name="ad_delete"),
     path("comments/<int:pk>/", CommentListView.as_view(), name="comment_info"),
-    path("comments/create/", CommentCreateView.as_view(), name="comment_create"),
+    path(
+        "comments/create/<int:pk>", CommentCreateView.as_view(), name="comment_create"
+    ),
     path(
         "comments/update/<int:pk>",
         CommentUpdateDeleteView.as_view(),

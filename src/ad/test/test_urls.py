@@ -36,7 +36,7 @@ class TestUrls(SimpleTestCase):
         self.assertEquals(resolve(url).func.view_class, CommentListView)
 
     def test_comment_create_url_resolves(self):
-        url = reverse("ad:comment_create")
+        url = reverse("ad:comment_create", args=[1])
         self.assertEquals(resolve(url).func.view_class, CommentCreateView)
 
     def test_comment_update_resolves(self):
